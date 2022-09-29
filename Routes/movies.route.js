@@ -4,11 +4,11 @@ const router = express.Router();
 
 //Movies
 router.get("/", async function (request, response) {
-
-    // console.log(request.params, id);
-    // const movie = movies.find((mv) => mv.id === id);
-    // response.send(movie);
-
+    //db.movies.find({ name: 'The Avengers'})
+    if (request.query.rating) {
+        request.query.rating = +request.query.rating;
+    }
+    console.log(request.query);
     const allMovies = await client
         .db("exMongo")
         .collection("movies")
