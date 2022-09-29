@@ -107,7 +107,7 @@ app.use(express.json());
 
 
 app.get("/", function (request, response) {
-    response.send("Hello world! . How are you?");
+    response.send("Hello world!. We are learning?");
 });
 
 //Movies
