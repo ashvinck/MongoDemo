@@ -12,7 +12,7 @@ const app = express();
 const MONGO_URL = process.env.MONGO_URL;
 
 
-const PORT = 4000;
+const PORT = process.env.PORT;
 const movies = [
     {
         id: "100",
