@@ -2,6 +2,7 @@ import express from "express";
 import { MongoClient } from "mongodb";
 import * as dotenv from 'dotenv';
 dotenv.config();
+import moviesRouter from './Routes/movies.route.js';
 
 
 const app = express();
@@ -100,7 +101,7 @@ async function createConnection() {
     console.log("MongoDB is connected!");
     return client;
 }
-const client = await createConnection();
+export const client = await createConnection();
 // express.json -> Middleware
 // app.use -> intercepts -> applies express.json() {Inbuilt middleware}
 app.use(express.json());
@@ -110,96 +111,7 @@ app.get("/", function (request, response) {
     response.send("Hello world!. We are learning?");
 });
 
-//Movies
-app.get("/movies", async function (request, response) {
-
-    // console.log(request.params, id);
-    // const movie = movies.find((mv) => mv.id === id);
-    // response.send(movie);
-
-    const allMovies = await client
-        .db("exMongo")
-        .collection("movies")
-        .find({})
-        .toArray();
-    response.send(allMovies)
-});
-
-
-
-
-//Movie by ID
-app.get("/movies/:id", async function (request, response) {
-    const { id } = request.params;
-    // console.log(request.params, id);
-    // const movie = movies.find((mv) => mv.id === id);
-    // response.send(movie);
-
-    const movie = await client
-        .db("exMongo")
-        .collection("movies")
-        .findOne({ id: id })
-
-    console.log(movie);
-    movie ?
-        response.send(movie)
-        : response.status(404).send({ msg: "Not Found" });
-});
-
-//create Movies
-
-app.post("/movies", express.json(), async function (request, response) {
-    const data = request.body;
-    console.log(data);
-
-    const result = await client
-        .db("exMongo")
-        .collection("movies")
-        .insertOne(data)
-
-    response.send(result)
-
-
-});
-
-
-
-///delete Movies
-app.delete("/movies/:id", async function (request, response) {
-    const { id } = request.params;
-    // console.log(request.params, id);
-    // db.movies.deleteOne
-
-    const result = await client
-        .db("exMongo")
-        .collection("movies")
-        .deleteOne({ id: id })
-
-    console.log(result);
-    result.deletedCount > 0
-        ? response.send({ msg: " Movie deleted successfully" })
-        : response.status(404).send({ msg: "Not Found" });
-});
-
-
-// Put operation
-app.put("/movies/:id", async function (request, response) {
-    const { id } = request.params;
-    const data = request.body;
-    // console.log(request.params, id);
-    // const movie = movies.find((mv) => mv.id === id);
-    // response.send(movie);
-
-    const updatedresult = await client
-        .db("exMongo")
-        .collection("movies")
-        .updateOne({ id: id }, { $set: data });
-
-    console.log(updatedresult);
-    updatedresult
-        ? response.send({ updatedresult })
-        : response.status(404).send({ msg: "Movie Not Found" });
-});
+app.use("/movies", moviesRouter);
 
 
 app.listen(PORT, () => console.log(`The server started in: ${PORT} ✨✨`));
