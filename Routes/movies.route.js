@@ -1,5 +1,5 @@
 import express from 'express';
-import { client } from '../index.js';
+import { getAllMovies, getMoviesById, createMovies, deleteMovies, updateMovies } from '../services/movies.service.js';
 const router = express.Router();
 
 //Movies
@@ -9,11 +9,8 @@ router.get("/", async function (request, response) {
         request.query.rating = +request.query.rating;
     }
     console.log(request.query);
-    const allMovies = await client
-        .db("exMongo")
-        .collection("movies")
-        .find({})
-        .toArray();
+    const allMovies = await getAllMovies();
+
     response.send(allMovies)
 });
 
@@ -27,10 +24,7 @@ router.get("/:id", async function (request, response) {
     // const movie = movies.find((mv) => mv.id === id);
     // response.send(movie);
 
-    const movie = await client
-        .db("exMongo")
-        .collection("movies")
-        .findOne({ id: id })
+    const movie = await getMoviesById(id)
 
     console.log(movie);
     movie ?
@@ -44,10 +38,7 @@ router.post("/", express.json(), async function (request, response) {
     const data = request.body;
     console.log(data);
 
-    const result = await client
-        .db("exMongo")
-        .collection("movies")
-        .insertOne(data)
+    const result = await createMovies(data)
 
     response.send(result)
 
@@ -62,10 +53,7 @@ router.delete("/:id", async function (request, response) {
     // console.log(request.params, id);
     // db.movies.deleteOne
 
-    const result = await client
-        .db("exMongo")
-        .collection("movies")
-        .deleteOne({ id: id })
+    const result = await deleteMovies(id)
 
     console.log(result);
     result.deletedCount > 0
@@ -82,10 +70,7 @@ router.put("/:id", async function (request, response) {
     // const movie = movies.find((mv) => mv.id === id);
     // response.send(movie);
 
-    const updatedresult = await client
-        .db("exMongo")
-        .collection("movies")
-        .updateOne({ id: id }, { $set: data });
+    const updatedresult = await updateMovies(id, data);
 
     console.log(updatedresult);
     updatedresult
@@ -94,3 +79,5 @@ router.put("/:id", async function (request, response) {
 });
 
 export default router;
+
+
