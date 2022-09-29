@@ -163,4 +163,43 @@ app.post("/movies", express.json(), async function (request, response) {
 });
 
 
+
+///delete Movies
+app.delete("/movies/:id", async function (request, response) {
+    const { id } = request.params;
+    // console.log(request.params, id);
+    // db.movies.deleteOne
+
+    const result = await client
+        .db("exMongo")
+        .collection("movies")
+        .deleteOne({ id: id })
+
+    console.log(result);
+    result.deletedCount > 0
+        ? response.send({ msg: " Movie deleted successfully" })
+        : response.status(404).send({ msg: "Not Found" });
+});
+
+
+// Put operation
+app.put("/movies/:id", async function (request, response) {
+    const { id } = request.params;
+    const data = request.body;
+    // console.log(request.params, id);
+    // const movie = movies.find((mv) => mv.id === id);
+    // response.send(movie);
+
+    const updatedresult = await client
+        .db("exMongo")
+        .collection("movies")
+        .updateOne({ id: id }, { $set: data });
+
+    console.log(updatedresult);
+    updatedresult
+        ? response.send({ updatedresult })
+        : response.status(404).send({ msg: "Movie Not Found" });
+});
+
+
 app.listen(PORT, () => console.log(`The server started in: ${PORT} ✨✨`));
