@@ -1,6 +1,7 @@
 import express from "express";
 import { MongoClient } from "mongodb";
 import * as dotenv from 'dotenv';
+import cors from "cors";
 dotenv.config();
 import moviesRouter from './Routes/movies.route.js';
 import bcrypt from 'bcrypt';
@@ -107,6 +108,7 @@ export const client = await createConnection();
 // express.json -> Middleware
 // app.use -> intercepts -> applies express.json() {Inbuilt middleware}
 app.use(express.json());
+app.use(cors());
 
 
 app.get("/", function (request, response) {
