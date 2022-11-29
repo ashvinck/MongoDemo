@@ -4,7 +4,7 @@ import * as dotenv from 'dotenv';
 import cors from "cors";
 dotenv.config();
 import moviesRouter from './Routes/movies.route.js';
-import bcrypt from 'bcrypt';
+// import bcrypt from 'bcrypt';
 
 
 const app = express();
