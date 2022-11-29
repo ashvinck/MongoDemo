@@ -1,4 +1,5 @@
 import express from 'express';
+import { Db } from 'mongodb';
 import { getAllMovies, getMoviesById, createMovies, deleteMovies, updateMovies } from '../services/movies.service.js';
 const router = express.Router();
 
@@ -37,12 +38,8 @@ router.get("/:id", async function (request, response) {
 router.post("/", express.json(), async function (request, response) {
     const data = request.body;
     console.log(data);
-
     const result = await createMovies(data)
-
     response.send(result)
-
-
 });
 
 
@@ -78,6 +75,5 @@ router.put("/:id", async function (request, response) {
         : response.status(404).send({ msg: "Movie Not Found" });
 });
 
+
 export default router;
-
-

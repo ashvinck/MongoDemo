@@ -3,6 +3,7 @@ import { MongoClient } from "mongodb";
 import * as dotenv from 'dotenv';
 dotenv.config();
 import moviesRouter from './Routes/movies.route.js';
+import bcrypt from 'bcrypt';
 
 
 const app = express();
@@ -11,6 +12,7 @@ const app = express();
 // const MONGO_URL = "mongodb://localhost:27017"; //v5
 // const MONGO_URL = "mongodb://127.0.0.1";
 const MONGO_URL = process.env.MONGO_URL;
+
 
 
 const PORT = process.env.PORT;
@@ -115,3 +117,12 @@ app.use("/movies", moviesRouter);
 
 
 app.listen(PORT, () => console.log(`The server started in: ${PORT} ✨✨`));
+
+// async function generateHashedPassword(password) {
+//     const NO_OF_ROUNDS = 10;
+//     const salt = await bcrypt.genSalt(NO_OF_ROUNDS);
+//     const hashedPassword = await bcrypt.hash(password, salt);
+//     console.log(salt);
+//     console.log(hashedPassword);
+// }
+// generateHashedPassword("password@123");
